@@ -1,0 +1,77 @@
+float ballx=  random(0, 800);            //Variables
+float bally= 120;
+float xspeed= 0;
+float yspeed= 2;
+int score= 0;
+float paddlew= 90; //Paddle width
+
+void setup() {
+  size(800, 600);
+  float r= random(0, 2);  //Random direction
+  if (r>=1) {
+    xspeed= 2; //Right
+  } else {
+    xspeed=-2; //Left
+  }
+}
+
+void draw() {
+  if (!mousePressed) {  //Crazy Rainbow Ball
+    background(0);
+  }
+
+  textAlign(CENTER, CENTER);            //Score Counter
+  textSize(30);
+  fill(255);
+  text("Score: "+score, 710, 20);
+  if (bally==490 && bally<=490 && ballx >= mouseX- paddlew/2 & ballx<= mouseX+ paddlew/2 & bally==490) {
+    score++;
+  }
+
+  rectMode(CENTER);            //Paddle Properties
+  fill(255);
+  stroke(200);
+  strokeWeight(2);
+  float mx= constrain(mouseX, paddlew/2, 800-paddlew/2); //Paddle never exits window
+  rect(mx, 500, paddlew, 15);
+
+  float r= random(0, 255);            //Ball Properties
+  float g= random(0, 255);
+  float b= random(0, 255);
+  fill(r, g, b);  //Color Changer
+  noStroke();
+  ellipseMode(CENTER);
+  ellipse(ballx, bally, 10, 10); //Ball
+
+  ballx+=xspeed;
+  bally+=yspeed;
+
+  if (ballx> width || ballx< 0) {            //Conditionals
+    xspeed= xspeed*-1;  //Wall Bouce
+  }
+  if (bally<=0) {
+    yspeed= yspeed*-1;  //Cieling Bounce
+  }
+  if (ballx >= mouseX- paddlew/2 & ballx<= mouseX+ paddlew/2 & bally==490) { //Paddle Bounce
+    yspeed= yspeed*-1.2;  
+    xspeed= xspeed*1.2;
+  }
+  if (bally>= 590) { //Game over!
+    fill(255);
+    text("Game Over! Your score is: "+score, 400, 250);
+    text("Press any key to continue", 400, 290);
+  }
+
+  if (keyPressed && bally>=500) { //Restart on key press condition and operation; restart with same rules as in beginning
+    bally=120;
+    ballx= 400;
+    r=random(0, 2); //Random direction after restart, as well
+    if (r>=1) {
+      xspeed= 2;
+    } else {
+      xspeed=-2;
+    }
+    yspeed= 2;
+    score= 0;
+  }
+}
